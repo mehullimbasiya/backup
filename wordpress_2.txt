@@ -1,0 +1,128 @@
+Question 
+how to show post type category wise in admin panel
+how to choose the only one taxonomy type in custom post type
+How to put numeric paginataion in wordpress
+how to set the 
+http://stackoverflow.com/questions/21959851/how-do-i-use-the-same-slugs-for-custom-post-types-and-taxonomies-in-wordpress
+
+____________________________________________________________________________________
+key function and statements
+____________________________________________________________________________________
+
+** Below function for the get the term(taxonomy category in the page )
+
+Link:http://wordpress.stackexchange.com/questions/26346/get-taxonomy-slug-from-url
+
+$obj = get_queried_object();
+print_r($obj);//retutrn the array
+echo $sector = get_queried_object()->name;
+
+_________________________
+// Add our custom permastructures for custom taxonomy and post
+add_action( 'wp_loaded', 'add_clinic_permastructure' );
+function add_clinic_permastructure() {
+	global $wp_rewrite;
+	add_permastruct( 'occasion', 'recipes/%occasion%', false );
+	add_permastruct( 'recipes', 'recipes/%occasion%/%recipes%', false );
+}
+// Make sure that all links on the site, include the related texonomy terms
+add_filter( 'post_type_link', 'recipe_permalinks', 10, 2 );
+function recipe_permalinks( $permalink, $post ) {
+	if ( $post->post_type !== 'recipes' )
+		return $permalink;
+	$terms = get_the_terms( $post->ID, 'occasion' );
+	
+	if ( ! $terms )
+		return str_replace( '%occasion%/', '', $permalink );
+	$post_terms = array();
+	foreach ( $terms as $term )
+		$post_terms[] = $term->slug;
+	return str_replace( '%occasion%', implode( ',', $post_terms ) , $permalink );
+}
+// Make sure that all term links include their parents in the permalinks
+add_filter( 'term_link', 'add_term_parents_to_permalinks', 10, 2 );
+function add_term_parents_to_permalinks( $permalink, $term ) {
+	$term_parents = get_term_parents( $term );
+	foreach ( $term_parents as $term_parent )
+		$permlink = str_replace( $term->slug, $term_parent->slug . ',' . $term->slug, $permalink );
+	return $permlink;
+}
+// Helper function to get all parents of a term
+function get_term_parents( $term, &$parents = array() ) {
+	$parent = get_term( $term->parent, $term->taxonomy );
+	
+	if ( is_wp_error( $parent ) )
+		return $parents;
+	
+	$parents[] = $parent;
+	if ( $parent->parent )
+		get_term_parents( $parent, $parents );
+    return $parents;
+}
+___________________________________________________________________________
+the_posts_pagination (
+	array(
+	'mid_size ' => '2',
+	'prev_text' => 'previous',
+	'next_text' => 'next',
+	)
+);
+___________________________________________________________________________
+<?php
+$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+ 
+$args = array(
+   'posts_per_page' => 1,
+   'paged' => $paged
+);
+ 
+$custom_query = new WP_Query( $args );
+ 
+while($custom_query->have_posts()) : 
+   $custom_query->the_post();	
+?>
+   <div>
+	<ul>
+	  <li>
+	    <h3><a class="blog-title" href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h3>
+		<span>Written <i>by:&nbsp;</i> <a class="link" href="<?php bloginfo('url'); ?>/author/<?php the_author(); ?>"> <?php the_author(); ?></a> <i>on</i> <?php the_time('F j, Y'); ?> <a class="link" href="<?php the_permalink(); ?>#comments "><?php comments_number( '', '- 1 comment', '- % comments' ); ?></a></span>
+		<div>
+		   <ul>
+			<div><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('thumbnail'); ?></a></div>
+		   </ul>
+		   <ul>
+			<li class="work-description"><?php echo the_excerpt(); ?></li>
+		   </ul>				
+		</div>	
+		<div><?php the_tags(); ?>			
+	   </li>
+	</ul>
+   </div> <!-- end blog posts -->	
+											
+     <?php endwhile; ?>		
+    
+<?php if (function_exists("pagination")) {
+    pagination($custom_query->max_num_pages);
+} ?>
+______________________________________________________________________________
+working with option
+
+http://wpengineer.com/968/wordpress-working-with-options/
+
+wp_get_archives('type=monthly');
+http://wordpress.stackexchange.com/questions/33897/custom-post-type-archives-by-year-month
+mkdir /path/to/your/project
+cd /path/to/your/project
+git init
+git remote add origin git@bitbucket.org:mehullimbasiya11/lara_demo.git
+Create your first file, commit, and push
+echo "mehullimbasiya" >> contributors.txt
+git add contributors.txt
+git commit -m "Initial commit with contributors"
+git push -u origin master
+____________________________________________________________________________
+
+
+Get Permalink on Custom Post Type Archive or Taxonomy pages
+https://isabelcastillo.com/get-permalink-on-custom-post-type-archive-or-taxonomy-pages
+ <a href="<?php echo get_post_type_archive_link( 'interviews' ); ?>">Movies Archive</a>

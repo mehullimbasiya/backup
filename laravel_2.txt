@@ -1,0 +1,47 @@
+
+// Facebook login in javascript sdk
+
+http://goodheads.io/2015/08/24/using-facebook-authentication-for-login-in-laravel-5/
+
+// Facebook login with laravel
+
+http://blog.damirmiladinov.com/laravel/laravel-5.2-socialite-facebook-login.html#.V4jPr1R94uQ
+
+http://devartisans.com/articles/complete-laravel5-socialite-tuorial
+
+http://stackoverflow.com/questions/19853162/how-to-get-user-location-and-user-hometown-in-facebook-api
+
+
+// Login with instagram using below package
+
+http://packalyst.com/packages/package/elevencodes/instagram-laravel
+
+// logout instagram
+
+var s = document.createElement("script");
+s.src = "https://instagram.com/accounts/logout";
+$("head").append(s);
+
+// for emberjs 
+
+https://emberobserver.com/
+
+// video for database
+
+https://www.youtube.com/watch?v=eWiBwazjW-8
+
+// crud site ember js
+
+http://baruch.lubinsky.co.za/post/2014/08/beerdemo/
+
+// ember
+
+http://stackoverflow.com/questions/11147325/ember-js-with-php	
+https://www.sitepoint.com/single-page-app-laravel-emberjs/
+
+wordpress
+
+How to dynamic one page HTML template to Wordpress theme
+https://www.youtube.com/watch?v=43q2IbjURnE
+https://www.youtube.com/watch?v=pJ4NTBdvyj4
+WordPress 101 - Part 4: How to use the Post Loop and custom body class

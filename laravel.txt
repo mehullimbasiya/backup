@@ -1,0 +1,328 @@
+/*
+|
+| Link for laravel Eloquent relationship
+|
+|
+/*
+
+http://cubettech.com/blog/laravel-eloquent-relationships/
+https://www.flynsarmy.com/2015/02/creating-a-basic-todo-application-in-laravel-5-part-1/
+http://www.tutorials.kode-blog.com/laravel-hello-world
+https://selftaughtcoders.com/from-idea-to-launch/lesson-17/laravel-5-mvc-application-in-10-minutes/
+http://justlaravel.com/routing-laravel/
+
+
+
+Laravel5 Mysql Insert Update delete Display Pagination
+https://www.youtube.com/watch?v=tD5ixcuRh6k
+
+http://laravel-recipes.com/recipes/190/generating-a-html-link-to-a-named-route
+
+// laravel 5.2 video for authentication
+
+https://www.youtube.com/watch?v=VzzhhgTK6R0
+
+//below link for you can pass two data array using group function in the view
+
+http://stackoverflow.com/questions/35350647/issue-in-fetching-data-from-db-to-the-views-in-laravel-5-2
+
+// for file upload in laravel
+
+http://itsolutionstuff.com/post/laravel-5-fileimage-upload-example-with-validationexample.html
+
+// below link for set kernel file of laravel when (validation error is not display),
+
+http://stackoverflow.com/questions/34438463/laravel-5-2-errors-not-appearing-in-blade
+
+// notifiaction /(message display package in laravel
+
+https://packagist.org/packages/levare/notify
+
+/*
+|
+| for validatev the field in form inset and update rules
+|
+*/
+'email' => 'unique:users,email_address,'.$user->id
+
+// ------------------------------------------------------------------------------------------------------------------------------------------//
+// If your table uses a primary key column name other than id, you may specify it as the fourth parameter: //
+// ------------------------------------------------------------------------------------------------------------------------------------------//
+
+'email' => 'unique:users,email_address,'.$user->id.',user_id'
+
+/*
+ * set the user roles sing sentinels link
+ */
+http://stackoverflow.com/questions/26155073/cartalyst-sentinel-laravel-how-do-you-create-roles
+
+/*
+	insert data into the database using sentinel
+
+*/
+
+/*$credentials = [
+		    'email'    => 'mehul@gmail.com',
+		    'password' => '123456',
+		];
+
+		$user = Sentinel::registerAndActivate($credentials);
+		$role = Sentinel::findRoleBySlug('admin');
+		$role->users()->attach($user);*/
+
+
+// rewrite rule 
+
+
+    RewriteRule ^(.*)$ newlaravel/$1
+RewriteRule ^ newlaravel/public/index.php [L]
+
+
+/*$credentials = [
+            'email'    => 'pranav@gmail.com',
+            'password' => '123456',
+            'first_name' => 'pranav',
+            'last_name' => 'desai',
+            'contact_no' => '7894561230',
+            'address' => 'silver heights , rajkot',
+            'city' => 'rajkot',
+            'state' => 'gujarat',
+            'zipcode' => '360003',
+            'country' => 'india'
+        ];
+
+        $user = Sentinel::registerAndActivate($credentials);
+        $role = Sentinel::findRoleBySlug('client');
+        $role->users()->attach($user);*/
+
+    // query for the two table relation
+
+
+    $users = User::with(['roles' => function($q){
+    $q->where('name', 'admin');
+}])->get();
+
+//
+
+{{ csrf_field() }}
+                    {{ method_field('PUT') }}
+
+
+// session message
+
+Session::flash('msg_product', 'Product update successfully!');
+                return redirect('admin/product');
+
+
+// insert the user data
+
+INSERT INTO `newlaravel`.`users` (`id`, `user_role`, `email`, `password`, `permissions`, `last_login`, `first_name`, `last_name`, `created_at`, `updated_at`, `contact_no`, `address`, `city`, `zipcode`, `state`, `country`) VALUES (NULL, '2', 'shivam@gmail.com', '123123', NULL, NOW(), 'shivam', 'mehta', NOW(), NOW(), '6321457890', 'rajkot', 'rajkot', '360003', 'gujarat', 'India');
+
+//validation rule
+
+
+ 'email' => 'required|unique:users,email,'.$this->getSegmentFromEnd(),
+                'password' => 'min:6',
+                'address' => 'required|min:5',
+                'city' => 'required|regex:/^[a-zA-Z ]+$/',
+                'zipcode' => 'required|integer|size:6',
+                'state' => 'required|regex:/^[a-zA-Z ]+$/',
+                'country' => 'required|regex:/^[a-zA-Z ]+$/'
+
+//request the data ajax
+
+    $(document).ready(function(){
+        $('#add_to_cart').click(function(){
+            var quantity, product, url, data;
+            quantity = $('input[name=quantity]').val();
+            product = $("#hidd_product_id").val();
+            url = "{{ url('client/cart/insert') }}";
+            alert(quantity);
+            alert(product);
+            data = {
+                quantity: quantity,
+                product_id: product,
+                '_token': $('input[name=_token]').val()
+            };
+            alert(data);
+            $.ajaxSetup({
+                headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+            });
+            $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                success: function (response) {
+                    alert(data);
+                  console.log(data);
+                }
+            });
+        });
+    });
+
+    // following  link for pass the resource method in ajax like put ,patch
+
+    http://stackoverflow.com/questions/22874004/what-url-to-use-for-update-function-in-a-resource-in-laravel-4-in-ajax-call 
+
+    //-------------------------------------------------------------
+
+            $user = Sentinel::getUser();
+        $user_id = $user->id;
+        $data = $request->all();
+        $order = new OrdersModel;
+        $data['user_id'] = $user_id;
+        $data['order_date'] = date('Y-m-d H:i:s');
+        $data['shipping_date'] = date('Y-m-d H:i:s');
+        if($order->save($data))
+        {
+            $order_id = $order->id;
+            $cart = CartModel::where('user_id', $user_id)->get();
+            foreach ($cart as $value)
+            {
+               $data_product = array('orders_id' => $order_id, 'user_id' => $user_id, 'product_id' => $value->product_id, 'quantity' => $value->quantity);
+               $order_details = new OrderDetailsModel;  
+               $order_details->orders_id = $order_id;
+               $order_details->user_id = $user_id;
+               $order_details->product_id = $value->product_id;
+               $order_details->quantity = $value->quantity;
+               $order_details->save();
+               
+            }
+        }   
+
+        // check role
+
+         $role = Sentinel::findRoleById(2);
+        $users = $role->users()->with('roles')->get();
+
+
+
+// ------------------Route backup-----------------------------------------------------------------
+
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for an application.
+| It's a breeze. Simply tell Laravel the URIs it should respond to
+| and give it the controller to call when that URI is requested.
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/admin', [
+    'as' => 'admin.login', 
+    'uses' => 'Admin\AuthController@index'
+]);
+
+Route::post('/admin', [
+    'as' => 'admin.handlelogin', 
+    'uses' => 'Admin\AuthController@handleindex'
+]);
+
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function(){ 
+
+    Route::resource('/forgetpassword','ForgetPasswordController');
+
+});
+
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['admin']], function(){
+
+    
+    Route::get('/dashboard','DashboardController@index');
+    Route::get('/logout','DashboardController@logout');
+    Route::resource('category','CategoryController');
+    Route::resource('product','ProductController');
+    Route::get('/orderlist','DashboardController@orderlist');
+    Route::resource('users','UserController');
+    Route::resource('orders','OrdersController');
+    Route::get('/changepassword','DashboardController@changepassword');
+    Route::post('/updatepassword','DashboardController@updatepassword');
+});
+
+
+/*
+| Below route of the client side
+| s
+*/
+
+Route::get('/client',[
+    'as' => 'client.index', 
+    'uses' => 'Client\ClientController@index'
+]);
+Route::get('/client/login',[
+    'as' => 'client.login', 
+    'uses' => 'Client\AuthController@index'
+]);
+Route::post('/client/login',[
+    'as' => 'client.handlelogin', 
+    'uses' => 'Client\AuthController@handlelogin'
+]);
+
+Route::get('/client/logout',[
+    'as' => 'client.logout', 
+    'uses' => 'Client\AuthController@logout'
+]);
+
+Route::post('/client/countproduct',[
+    'as' => 'client.countproduct', 
+    'uses' => 'Client\CartController@count_product'
+]);
+Route::post('/client/updateprofile',[
+    'as' => 'client.updateprofile', 
+    'uses' => 'Client\ClientController@update_user_profile'
+]);
+Route::group(['prefix' => 'client', 'namespace' =>'Client'], function(){
+    
+    Route::get('/categories/{categories}','ClientsProductController@category_products');
+    Route::resource('/newuser','CreateUserController');
+    Route::resource('/products','ClientsProductController');    
+    Route::resource('/cart','CartController');
+    Route::post('/cart/insert', 'CartController@insertdata');
+    Route::post('/cart/delete/', 'CartController@deleteproduct');
+    Route::post('/products/loadmore', 'ClientsProductController@loadmore');
+    Route::post('/categories/loadmore', 
+                ['as' => 'client.products.loadmore', 'uses' => 'ClientsProductController@load_category_products']);
+    Route::resource('/forgetpassword', 'ForgetPasswordController');
+
+
+});
+
+Route::group(['prefix' => 'client', 'namespace' => 'Client', 'middleware' => ['client']], function(){
+
+    Route::resource('/checkout','CheckoutController');
+    Route::get('/profile',['as' => 'client.client_profile', 'uses' => 'ClientController@clientprofile']);
+    Route::resource('trackorder','TrackOrderController');
+});
+
+\\\\\\\\\\\\\\\
+
+
+$credentials = [
+            'email'    => 'admin@gmail.com',
+            'password' => '123456',
+            'first_name' => 'admin',
+            'last_name' => 'admin',
+            'address' =>'rajkot',
+            'city' =>'rajkot',
+            'state' =>'gujarat',
+            'country' => 'india',
+            'zipcode' =>'360003',
+            'contact_no' => '7894563210'
+
+        ];
+
+        $user = Sentinel::registerAndActivate($credentials);
+        $role = Sentinel::findRoleBySlug('admin');
+        $role->users()->attach($user);
+
+
+// facebook ads api for laravel site link
+
+https://packagist.org/packages/yish/laravel-facebook-php-ads-sdk

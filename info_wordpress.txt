@@ -1,0 +1,596 @@
+
+//------------------------------------------------------------
+// How to establish the wordpress live site into the localhost 
+//------------------------------------------------------------
+
+1. simple download the zip file *
+2. set to local system (put in to var/www/) / (xampp/htdocs) *
+3. make the database and export the database
+	Into database.sql file open and replace the url of live site to localhost / you can change the url give below
+
+	UPDATE wp_options SET option_value = replace(option_value, 'http://www.example.com', 'http://localhost/test-site') WHERE option_name = 'home' OR option_name = 'siteurl';
+ 
+	UPDATE wp_posts SET post_content = replace(post_content, 'http://www.example.com', 'http://localhost/test-site');
+ 
+	UPDATE wp_postmeta SET meta_value = replace(meta_value,'http://www.example.com','http://localhost/test-site');
+
+	* You can replace the url into as below
+		=>	open database in text editor
+		=>  then replace the http://www.example.com to http://localhost/test-site
+
+
+4. change the wp-config.php file database name, username and password
+5. optional : if website page not found occure the you should change the your .htaccess file also 
+	or set the .htaccess file into your wordpress root folder like 
+	wordpress/.htaccess file
+	you should write .htaccess form into your live site wp-admin/settings/permalinks page at the end of page you get .htaccess code like
+	
+	example:
+		<IfModule mod_rewrite.c>
+		RewriteEngine On
+		RewriteBase /roland/
+		RewriteRule ^index\.php$ - [L]
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule . /roland/index.php [L]
+		</IfModule>
+
+	***** You can also change the host into the /etc/hosts file  set the host name / (not sure that is working or not )
+
+//--------------------------------------------------------------
+// Add to the custom post type into the wordpress 
+//-------------------------------------------------------------
+
+Link:
+https://www.elegantthemes.com/blog/tips-tricks/creating-custom-post-types-in-wordpress
+
+//--------------------------------------------------------------
+//  For wordpress beginner discription of all
+//--------------------------------------------------------------
+
+Link:
+https://www.siteground.com/tutorials/wordpress/wordpress_start.htmt
+
+//------------------------------------------------------------------------
+// get the the custom post type value 
+//------------------------------------------------------------------------
+
+$args = array(
+    'post_type' => 'expertise', //remember this is-case sensitive
+    'posts_per_page' => -1,
+);
+
+$releaseQuery = new WP_Query( $args );
+
+if ( $releaseQuery->have_posts() ) :
+while ( $releaseQuery->have_posts() ) :
+$releaseQuery->the_post();
+
+// Fetching the post ID for demonstration and for use later
+echo $c_id = get_the_ID();
+
+// After running the_post(), alot of the Wordpress functions (not all) can now be used without supplying the post ID.    
+echo get_the_title();
+echo get_field('title');
+// You could also have used get_the_title($c_id);
+
+// Then:
+echo get_post_meta($c_id, 'release_title', true); 
+echo get_post_meta($c_id, 'release_artist', true); 
+
+endwhile;
+endif;
+
+// Return to the current page's main query
+wp_reset_query();
+?>
+
+//http://wordpress.stackexchange.com/questions/156304/get-child-terms-of-current-term-of-the-current-post
+
+//Dead code
+
+
+<?php
+	// $args = array(
+ //    	'taxonomy' => 'case-studies category',
+ //    	'hide_empty' => false,
+	// );
+ // 	$terms = get_terms($args);
+ // 	$texonomy = $terms['taxonomy'];
+	// $term_texonomy_id = $terms['term_taxonomy_id'];
+	// $count = count($terms); 
+	// if ( $count > 0 ) {
+	//  	foreach ( $terms as $term ) { 
+	//  		echo $term->name; 
+	// 		echo get_field('icon',$term->taxonomy."_".$term->term_id);
+	// 	}
+	// }
+?>
+<?php
+echo "<br/><br/>";
+// $term_id = 10;
+// echo $taxonomy_name = 'case-studies category';
+//  $termchildren = get_term_children( $term_id, $taxonomy_name );
+//  print_r($termchildren);
+
+
+// foreach ( $termchildren as $child ) {
+// 	$term = get_term_by( 'id', $child, $taxonomy_name );
+// 	echo '<h1>' . $term->name . '</h1>';
+// }?>
+for home url
+<?php echo get_settings('home'); ?>
+
+
+//get the post type by post id
+<?php 
+// get the case study
+echo $case_study_id;
+$post = get_post($case_study_id);
+if($post):
+setup_postdata($post);
+the_title();
+echo "<br/>";
+the_permalink();
+echo "<br/>";
+the_field('case_study__title');
+echo "<br/>";
+the_field('case_study_details');
+echo "<br/>";
+
+wp_reset_postdata();
+endif;
+?>
+
+//  This will create a Javascript Object in the header, which will be available to your scripts at runtime.
+
+   wp_register_script('developer_custom-js',get_template_directory_uri().'/js/developer_custom.js',array(),NULL,false);
+     wp_enqueue_script('developer_custom-js');
+
+     $wnm_custom = array( 'template_url' => get_bloginfo('template_url'),'site_url' => site_url() );
+     wp_localize_script( 'developer_custom-js', 'wnm_custom', $wnm_custom );
+     wp_enqueue_script( 'developer_custom-js' );
+
+  # and following code for get the url is given
+
+  	alert(wnm_custom.site_url); // alert(object_name.string);
+
+ // 
+
+
+
+/*Media min-width:768px */
+@media only screen and (min-width: 768px) {
+
+	.amazingslider-title-1 {
+		font-size: 50px;
+		line-height: 66px;
+	}
+	.carousel-content {
+	    color:black;
+	    display:flex;
+	    align-items:center;
+	    padding-bottom: 0px;
+	}
+
+	#text-carousel {
+	  width: 100%;
+	  height: auto;
+	  padding: 50px;
+	 
+	}
+	.carousel-inner-content{
+	  padding:5% 10% 5% 10%;
+	}
+	.comma-image
+	{
+		height: 50%;
+		width: 50%;
+	  	float: left;
+	  	padding-left: 0px;
+	}
+	.comma{
+		height: 60px;
+		width:88px;
+	}
+	.statement{
+	  float: left;
+	  padding-left:100px;
+	  padding-right: 80px;
+	  text-align: justify;
+	  color:#3c3b3d;
+	  font-size:14px;
+	}
+	.clearfix{
+	  clear: both;
+	}
+	.author-name{
+	  text-align:center;
+	  padding-top:15px;
+	  font-weight:bold;
+	}
+	.author-post{
+	  text-align: center;
+	  padding: 0px 22% 0px 22%;
+	  font-size: 12px;
+	  color:#3c3b3d;
+	}
+	.pull-right button{
+	  background-color: #fff;
+	  border:1px solid #f3f3f3;
+
+	}
+	#text-carousel .container .row .col-xs-24 .carousel-inner .pull-right {
+		padding-right:56px; 
+	}
+	hr.hr-slider{
+		width: 85%;
+		padding-top: 0px;
+		margin-top: 0px;
+		margin-bottom: 10px;
+		border:1px solid #f3f3f3;
+	}
+	
+}
+
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a {
+	color:#01c3df;
+}
+
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a .icon4 {
+	background-position: -38px -266px !important;
+}
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a .icon2 {
+	background-position: -38px -82px !important;
+}
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a .icon3 {
+	background-position: -38px -176px !important;
+}
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a .icon1 {
+	background-position: -38px 0px !important;
+}
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a .icon6 {
+	background-position: -38px -445px !important;
+}
+.case-studies-content-block .case-studies-content-first-block ul li.expertise-active a .icon5 {
+	background-position: -38px -354px !important;
+}
+
+
+
+/*Media min-width:992px */
+@media only screen and (min-width: 992px) {
+	.carousel-content {
+		width: 75%;
+		margin: 0 auto;
+	    color:black;
+	    display:flex;
+	    align-items:center;
+	    padding-bottom: 0px;
+	}
+
+	#text-carousel {
+	  width: 100%;
+	  height: auto;
+	  padding: 50px;
+	 
+	}
+	.carousel-inner-content{
+	  padding:5% 10% 5% 10%;
+	}
+	.comma-image
+	{
+		height: 100%;
+		width: 100%;
+	  	float: left;
+	  	//padding-left: 60px;
+	}
+	.statement{
+	  float: left;
+	  line-height: 25px;
+	  padding-left:160px;
+	  padding-right: 160px;
+	  text-align: justify;
+	  color:#3c3b3d;
+	  font-size:16px;
+	}
+	.clearfix{
+	  clear: both;
+	}
+	.author-name{
+	  text-align:center;
+	  padding-top:15px;
+	  font-weight:bold;
+	}
+	.author-post{
+	  text-align: center;
+	  padding: 0px 30% 0px 30%;
+	  font-size: 14px;
+	  color:#3c3b3d;
+	}
+	.pull-right button{
+	  background-color: #fff;
+	  border:1px solid #f3f3f3;
+
+	}
+	#text-carousel .container .row .col-xs-24 .carousel-inner .pull-right {
+		padding-right:85px; 
+	}
+	hr.hr-slider{
+		width: 85%;
+		padding-top: 0px;
+		margin-top: 0px;
+		margin-bottom: 10px;
+		border:1px solid #f3f3f3;
+	}
+}
+.clearfix{
+	  clear: both;
+	}
+.carousel-content {
+    color:black;
+    display:flex;
+    align-items:center;
+    padding-bottom: 0px;
+}
+
+#text-carousel {
+  width: 100%;
+  height: auto;
+  padding: 50px 20px 50px 20px;
+ 
+}
+.carousel-inner-content{
+  padding:5% 0% 5% 0%;
+}
+#text-carousel .container .row .col-xs-24 .carousel-inner .pull-right button{
+  background-color: #fff;
+  border:1px solid #f3f3f3;
+
+}
+.statement{
+	  padding-left:95px;
+	  padding-right: 95px;
+	  text-align: justify;
+	  color:#3c3b3d;
+	  font-size:16px;
+}
+.author-name{
+  text-align-last:center;
+  padding-top:5px;
+  font-size: 18px
+  font-weight:bold;
+}
+.author-post{
+  text-align: center;
+  padding: 0 30%;
+  font-size: 14px;
+  color:#3c3b3d;
+}
+.vertical-text {
+	/*transform: rotate(90deg);
+	transform-origin: left top 0;*/
+	// writing-mode:tb-rl;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+    white-space:nowrap;
+    display:block;
+    float: left;
+    bottom:0;
+    //width:20px;
+    //height:20px;
+    line-height: 0px;
+    margin-top: 0px;
+    margin-left:90px; 
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+}	
+.vertical-line {
+	transform-origin: left top 0;
+	// writing-mode:tb-rl;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+    white-space:nowrap;
+    display:block;
+    float: left;
+    bottom:0;
+    width:10px;
+    height:10px;
+    margin-top: 25px;
+    margin-left:82px; 
+    margin-bottom: 0px;
+    padding: 10px;
+    border-color: #e5e5e5;
+}
+.vertical-line-bottom {
+	border-top: 1px solid #000;
+	//transform-origin: left top 0;
+	// writing-mode:tb-rl;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+    white-space:nowrap;
+    display:block;
+    float: left;
+    width:20px;
+    height:20px;
+    margin-top: 80px;
+    margin-left:82px; 
+    margin-bottom: 160px;
+    padding: 10px;
+    border-color:#000;//#e5e5e5;
+}
+div.wpcf7-mail-sent-ok{
+	display: initial;
+    color: #398f14;
+    font-weight: bold;
+    border: none !important;
+} 
+.case_study_link{
+	text-decoration:none !important; 
+	color: #333333;
+}
+
+// set the out line of validation field 
+
+http://stackoverflow.com/questions/15606211/jquery-validation-plugin-change-border-color-no-text
+
+//edit js from wp admin link
+
+https://aarontgrogg.com/blog/2012/01/31/why-cant-i-edit-javascript-files-in-the-wordpress-theme-editor/
+http://stackoverflow.com/questions/3326967/how-to-add-custom-javascript-to-wordpress-admin
+
+//
+http://www.hongkiat.com/blog/update-wordpress-without-ftp/
+
+ echo  $count_posts = wp_count_posts('case-studies')->publish; 
+
+ <?php
+						$args = array(
+						     'post_type' => 'case-studies',
+						     'posts_per_page' => 1,
+						     'post_status' => 'publish',
+						     'order' => 'DESC',
+						     'tax_query' => array(
+						       'relation' => 'AND',
+						          array(
+						             'taxonomy' => 'case_studies_category',
+						             'field' => 'slug',
+						             'terms' => $category,
+						          )
+						     )
+						);
+						$my_query = new WP_Query( $args );
+						echo $count = $my_query->found_posts;
+----------------------------
+
+
+<?php
+	$args = array(
+	     'post_type' => 'case-studies',
+	     'posts_per_page' => 1,
+	     'post_status' => 'publish',
+	     'order' => 'DESC',
+	     'tax_query' => array(
+	       'relation' => 'AND',
+	          array(
+	             'taxonomy' => 'case_studies_category',
+	             'field' => 'slug',
+	             'terms' => $category,
+	          )
+	     )
+	);
+	$my_query = new WP_Query( $args );
+	$count = $my_query->found_posts;
+	if( $my_query->have_posts() ) {
+		while ($my_query->have_posts()) : $my_query->the_post();?>
+			<div class="col-md-12">
+				<div class="case-studies-content-second-subblock">
+					<div class="case-studies-content-image">
+						<img src="<?php echo get_field('case_study_image');?>">
+					</div>
+					<div class="case-studies-details">
+						<h4><?php echo get_field('case_study__title');?></h4>
+						<p><?php echo get_field('case_study_details'); ?></p>
+					</div>
+					<div class="read-full-case-study">
+						<a href="<?php echo the_permalink(); ?>">Read Full Case Study</a>
+
+					</div>
+				</div>
+			</div><?php
+		endwhile;
+		wp_reset_query();
+	}else{
+		echo "<h3 class='text-center text-info'>Case studies not avaiable.</h3>";
+	}?>
+
+
+	--------------------------------------------------------
+
+	<?php 
+						$args = array(
+						     'post_type' => 'case-studies',
+						     
+						     'posts_per_page' =>2,
+						     'post_status' => 'publish',
+						     'order' => 'DESC',
+						);
+						$my_query = new WP_Query( $args );
+						if( $my_query->have_posts() ) {
+						while ($my_query->have_posts()) : $my_query->the_post(); 
+						?>
+						<div class="col-md-12">
+							<div class="case-studies-content-second-subblock">
+								<div class="case-studies-content-image">
+									<img src="<?php echo get_field('case_study_image');?>">
+								</div>
+								<div class="case-studies-details">
+									<h4><?php echo get_field('case_study__title');?></h4>
+									<p><?php echo get_field('case_study_details'); ?></p>
+								</div>
+								<div class="read-full-case-study">
+									<a href="<?php the_permalink(); ?>">Read Full Case Study</a>
+								</div>
+							</div>
+						</div><?php 
+						endwhile;
+						wp_reset_query();
+						}
+						?>
+
+
+
+		----------------
+    wp_register_script('custom-js',WP_PLUGIN_URL.'/PLUGIN_NAME/js/custom.js',array(),NULL,true);
+    wp_enqueue_script('custom-js');
+
+    $wnm_custom = array( 'template_url' => get_bloginfo('template_url') );
+    wp_localize_script( 'custom-js', 'wnm_custom', $wnm_custom );
+
+    -------------------
+
+    http://solislab.com/blog/5-tips-for-using-ajax-in-wordpress/
+
+    //below line place in to wp-config.php , it can direct install plugin without ftp
+
+    define('FS_METHOD','direct');
+
+    // fetch the data from the database
+
+    <table border="1">
+<tr>
+ <th>Firstname</th>
+ <th>Lastname</th>
+ <th>Points</th>
+</tr>
+  <?php
+    global $wpdb;
+    $result = $wpdb->get_results ( "SELECT * FROM myTable" );
+    foreach ( $result as $print )   {
+    ?>
+    <tr>
+    <td><?php echo $print->firstname;?></td>
+    </tr>
+        <?php }
+  ?>   
+
+  // site for google map
+  http://www.labnol.org/internet/embed-google-maps-background/28457/
+  http://stackoverflow.com/questions/3059044/google-maps-js-api-v3-simple-multiple-marker-example
+
+  // website for test the site in different screen
+  https://www.browserstack.com/
